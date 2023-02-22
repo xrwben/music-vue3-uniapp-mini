@@ -1,16 +1,24 @@
 <template>
   <!-- <header>导航</header> -->
-  <router-view></router-view>
+  <div class="page-route">
+    <router-view></router-view>
+  </div>
+  <div class="footer">
+    <tab-bar></tab-bar>
+    <player v-show="false"></player>
+  </div>
 </template>
 
 <script setup>
-import { getPlayListAPI } from '@/api/index.js'
+import TabBar from '@/components/TabBar.vue'
+import Player from '@/components/Player.vue'
+// import { getPlayListAPI } from '@/api/index.js'
 
-getPlayListAPI({
-  id: 3778678
-}).then(res => {
-  console.log(res)
-})
+// getPlayListAPI({
+//   id: 3778678
+// }).then(res => {
+//   console.log(res)
+// })
 // import { examStore } from '@/store/index.js'
 
 // const store = examStore()
@@ -30,11 +38,22 @@ getPlayListAPI({
 </script>
 
 <style lang="less">
-  @import "@/style/reset.less";
+  @import "@/style/app.less";
   #app {
     width: 100%;
     height: 100vh;
-    background: #f5f7f9;
-    overflow: auto;
+    background: #f9fafb;
+    overflow: hidden;
+    .page-route {
+      height: 100%;
+      overflow: auto;
+      padding-bottom: 100px;
+    }
+    // .footer {
+    //   width: 100%;
+    //   position: fixed;
+    //   bottom: 0;
+    //   left: 0;
+    // }
   }
 </style>

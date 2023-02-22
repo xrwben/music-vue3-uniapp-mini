@@ -1,20 +1,58 @@
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
-html, body {
-  // height: 100%;
-  // max-width: 640px;
+body,
+dl, dt, dd, ul, ol, li,
+h1, h2, h3, h4, h5, h6,
+pre, code, form, fieldset, legend, input, textarea,
+p, blockquote, th, td, hr, button,
+article, aside, details, figcaption, figure, footer, header, menu, nav, section {
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 body {
-  font-family: 'PingFang SC';
-  // -webkit-tap-highlight-color: transparent;
-  /* webkit是苹果浏览器引擎，tap点击，highlight背景高亮，color颜色，颜色用数值调节 */
-  // background: @color-bg-body;
-  // color: @color-text-dark;
+  height: 100%;
+  font-family: 'PingFang SC', Helvetica, sans-serif;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
 }
+a {
+  text-decoration: none;
+}
+i, em {
+  font-style: normal;
+}
+img {
+  display: block;
+}
+li {
+  list-style: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
 ::-webkit-scrollbar {
-   width: 0;
-  height: 0;
+  display: none;
+}
+
+input {
+  border: none;
+  appearance: none;
+  border-radius: 0;
+  outline: medium;
+  background-color: transparent;
+
+  &[type="number"] {
+    appearance: textfield;
+  }
+
+  &[type="number"]::-webkit-inner-spin-button,
+  &[type="number"]::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+  }
 }

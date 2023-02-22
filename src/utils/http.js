@@ -2,7 +2,7 @@ import axios from 'axios'
 import { showToast } from 'vant'
 
 const axiosIns = axios.create({
-  baseURL: '/api',
+  baseURL: '/api-music',
   timeout: 30000,
   withCredentials: true,
 })

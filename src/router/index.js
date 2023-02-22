@@ -5,12 +5,26 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: () => import('@/views/home.vue')
+      redirect: '/home'
     },
     {
-      path: '/about',
-      name: 'about',
+      path: '/home',
+      name: 'home',
+      component: () => import('@/views/home/index.vue')
+    },
+    {
+      path: '/search',
+      name: 'search',
+      component: () => import('@/views/search/index.vue')
+    },
+    {
+      path: '/music',
+      name: 'music',
+      component: () => import('@/views/music/index.vue')
+    },
+    {
+      path: '/play',
+      name: 'play',
       component: () => import('@/views/about.vue')
     }
   ]

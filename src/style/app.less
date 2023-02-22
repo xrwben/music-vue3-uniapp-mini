@@ -1,3 +1,20 @@
-#app {
-  min-height: 100vh;
+@import 'reset.less';
+@import '//at.alicdn.com/t/c/font_3891327_d2mbs69mkpn.css';
+
+/** 清除浮动 **/
+.clearfix::after {
+  content: "";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+.clearfix {
+  *zoom: 1;
+}
+/** 单行超出省略 **/
+.txt-of {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

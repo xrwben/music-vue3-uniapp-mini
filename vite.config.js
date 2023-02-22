@@ -36,13 +36,19 @@ export default defineConfig(({ command, mode }) => {
     // envPrefix: 'LB_', // 默认 VITE_
     server: {
       host: true,
-      port: 3000,
+      port: 5000,
+      // https: true,
       proxy: {
-        '/api': {
-          target: 'https://mu-api.yuk0.com',
+        // '/api': {
+        //   target: 'https://mu-api.yuk0.com',
+        //   changeOrigin: true,
+        //   rewrite: (path) => path.replace(/^\/api/, '')
+        // },
+        '/api-music': {
+          target: 'http://82.157.247.15:3000',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, '')
-        }
+          rewrite: (path) => path.replace(/^\/api-music/, '')
+        },
       }
     },
     build: {

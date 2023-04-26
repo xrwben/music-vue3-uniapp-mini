@@ -1,7 +1,7 @@
 <template>
-  <div class="music">
+  <div class="home">
     <div class="search" @click="search">
-      <i></i><span>搜索你想听的歌曲</span>
+      <i class="iconfont icon-search"></i><span>搜索你想听的歌曲</span>
     </div>
     <div class="banner">
       <swiper
@@ -12,12 +12,12 @@
     <div class="module-recommend recommend-song">
       <div class="recommend-head">
         <div class="title">推荐歌曲</div>
-        <span class="more" @click="router.push('/music-category')">更多<i class="iconfont icon-arrow-right"></i></span>
+        <span class="more" @click="router.push('/music')">更多<i class="iconfont icon-arrow-right"></i></span>
       </div>
       <div class="recommend-con">
-        <div class="recommend-card" v-for="item in musicList" :key="item.id">
+        <div class="recommend-card" v-for="item in musicList" :key="item.id" @click="playSong(item)">
           <div class="pic">
-            <img :src="item.picUrl" alt="">
+            <img :src="item.picUrl+'?imageView=1&type=webp&thumbnail=210x0'" alt="">
             <div class="mask song-mask"><i :class="['iconfont', true ? 'icon-play-simple': 'icon-pause-simple']"></i></div>
           </div>
           <div class="info">
@@ -30,13 +30,13 @@
     <div class="module-recommend recommend-song-list">
       <div class="recommend-head">
         <div class="title">推荐歌单</div>
-        <span class="more">更多<i class="iconfont icon-arrow-right"></i></span>
+        <span class="more" @click="router.push('/songlist')">更多<i class="iconfont icon-arrow-right"></i></span>
       </div>
       <div class="recommend-con">
-        <div class="recommend-card" v-for="item in songList" :key="item.id">
+        <div class="recommend-card" v-for="item in songList" :key="item.id" @click="goSongListDetails(item)">
           <div class="pic">
-            <img :src="item.picUrl" alt="">
-            <div class="mask"><i class="iconfont icon-play-count"></i>{{ item.playCount }}</div>
+            <img :src="item.picUrl+'?imageView=1&type=webp&thumbnail=210x0'" alt="">
+            <div class="mask"><i class="iconfont icon-play-count"></i>{{ numberFormat(item.playCount) }}</div>
           </div>
           <div class="info">
             <p class="line-ellipsis-two name">{{ item.name }}</p>
@@ -52,7 +52,7 @@
       <div class="recommend-con">
         <div class="recommend-card" v-for="item in singerList" :key="item.id">
           <div class="pic">
-            <img :src="item.picUrl" alt="">
+            <img :src="item.picUrl+'?imageView=1&type=webp&thumbnail=158x0'" alt="">
           </div>
           <div class="info">
             <p class="line-ellipsis-one name">{{ item.name }}</p>
@@ -63,12 +63,12 @@
     <div class="module-recommend module-rank">
       <div class="recommend-head">
         <div class="title">排行榜</div>
-        <span class="more">更多<i class="iconfont icon-arrow-right"></i></span>
+        <span class="more" @click="router.push('/ranklist')">更多<i class="iconfont icon-arrow-right"></i></span>
       </div>
       <div class="rank-con">
         <div class="rank-card" v-for="item in rankList" :key="item.id">
           <div class="pic">
-            <img :src="item.coverImgUrl" alt="">
+            <img :src="item.coverImgUrl+'?imageView=1&type=webp&thumbnail=210x0'" alt="">
           </div>
           <div class="rank-details">
             <p class="rank-title">{{ item.name }}</p>
@@ -86,9 +86,13 @@
 import Swiper from '@/components/Swiper.vue';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router'
+import { playerStore } from '@/store/index.js'
 import { getBannerListApi, getRecommendMusicApi, getRecommendSongListApi, getTopSingerApi, getTopRankApi } from '@/api/index.js'
+import { numberFormat } from '@/utils/utils.js'
+import $mittBus from '@/utils/mittBus.js'
 
 const router = useRouter()
+const store = playerStore()
 
 const bannerList = ref([])
 const musicList = ref([])
@@ -124,12 +128,18 @@ const getRecommendSong = () => {
     musicList.value = res.result
   })
 }
+const playSong = (info) => {
+  console.log(info)
+  $mittBus.emit('controlPlayerMittBus', true)
+  store.$patch((state) => {
+    state.songId = info.id
+  })
+}
 // 获取推荐歌单
 const getRecommendSongList = () => {
   getRecommendSongListApi({
     limit: 6
   }).then(res => {
-    console.log(res)
     songList.value = res.result
   })
 }
@@ -138,21 +148,29 @@ const getTopSinger = () => {
   getTopSingerApi({
     limit: 3
   }).then(res => {
-    console.log(res)
     singerList.value = res.artists
   })
 }
 // 获取排行榜
 const getTopRank = () => {
   getTopRankApi().then(res => {
-    console.log(res)
     rankList.value = res.list.slice(0, 3)
+  })
+}
+// 跳转到歌单详情页
+const goSongListDetails = (info) => {
+  router.push({
+    path: '/songlist-details',
+    query: {
+      songlist_id: info.id
+    }
   })
 }
 </script>
 
 <style lang="less">
-.music {
+.home {
+  background: #f9fafb;
   padding: 20px 0;
   .search {
     width: 686px;
@@ -165,6 +183,10 @@ const getTopRank = () => {
     justify-content: center;
     align-items: center;
     margin: 0 auto;
+    & > i {
+      font-size: 32px;
+      margin-right: 10px;
+    }
   }
   .banner {
     width: 100%;

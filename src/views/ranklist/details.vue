@@ -1,16 +1,8 @@
 <template>
-  <div class="music">
-    <div class="tabs">
-      <div
-        :class="['tab-item', {'tab-active': item.id === currentTab}]"
-        v-for="item in tabList"
-        :key="item.id"
-        @click="changeTab(item)">
-        {{ item.type }}
-      </div>
-    </div>
+  <div class="songlist-details">
     <div class="banner">
-      <img src="" alt="">
+      <img class="pic" :src="detailsInfo?.coverImgUrl+'?imageView=1&type=webp&thumbnail=375x0'" alt="">
+      <div class="time">{{ detailsInfo?.updateTime }} 更新</div>
     </div>
     <div class="song-list">
       <div class="list-head">
@@ -22,7 +14,7 @@
         <div class="info">
           <div class="name txt-of">{{ item.name }}</div>
           <div class="singer txt-of">
-            <span v-for="(s, i) in item.artists" :key="i">{{ item.artists.length - 1 === i ? s.name : (s.name + '&') }}</span> - <span>{{ item.album.name }}</span>
+            <span v-for="(s, i) in item.ar" :key="i">{{ item.ar.length - 1 === i ? s.name : (s.name + '&') }}</span> - <span>{{ item.al.name }}</span>
           </div>
         </div>
         <i class="play-btn iconfont icon-play"></i>
@@ -32,42 +24,31 @@
 </template>
 
 <script setup>
-import { reactive, toRefs, onMounted } from 'vue'
+import { reactive, toRefs } from 'vue'
+import { useRoute } from 'vue-router'
 import { playerStore } from '@/store/index.js'
-import { getTopSongApi } from '@/api/index.js'
+import { getSongListDetailsApi } from '@/api/index.js'
+// import { timeFormat } from '@/utils/utils.js'
 import $mittBus from '@/utils/mittBus.js'
 
+const route = useRoute()
 const store = playerStore()
 const state = reactive({
-  tabList: [
-    { type: '华语', id: 7 },
-    { type: '欧美', id: 96 },
-    { type: '韩国', id: 16 },
-    { type: '日本', id: 8 },
-  ],
-  currentTab: 7,
+  detailsInfo: null,
   songList: []
 })
-const { tabList, currentTab, songList } = toRefs(state)
+const { detailsInfo, songList } = toRefs(state)
 
-onMounted(() => {
-  getList()
-})
-
-// 获取分类列表
-const getList = () => {
-  getTopSongApi({
-    type: state.currentTab
+const getDetails = () => {
+  getSongListDetailsApi({
+    id: route.query.rank_id
   }).then(res => {
-    state.songList = res.data
-    console.log(state.songList)
+    console.log(res)
+    state.detailsInfo = res.playlist
+    state.songList = res.playlist.tracks
   })
 }
-// 切换分类
-const changeTab = (info) => {
-  state.currentTab = info.id
-  getList()
-}
+getDetails()
 // 播放所有歌曲
 const playAllSong = () => {
   $mittBus.emit('controlPlayerMittBus', true)
@@ -88,29 +69,33 @@ const playSong = (info) => {
 </script>
 
 <style lang="less" scoped>
-.music {
-  .tabs {
+.songlist-details {
+  background: #fff;
+  .banner {
     width: 100%;
-    padding: 0 40px;
-    display: flex;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    .tab-item {
-      color: #262338;
-      font-size: 32px;
-      font-weight: 700;
-      line-height: 45px;
-      &.tab-active {
-        color: #3c90ee;
-      }
+    height: 440px;
+    overflow: hidden;
+    position: relative;
+    .pic {
+      width: 100%;
+      height: auto;
+      margin-top: -175px;
+    }
+    .time {
+      color: #fff;
+      font-size: 30px;
+      text-align: center;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 90px;
     }
   }
   .song-list {
     background: #fff;
     border-radius: 30px 30px 0 0;
     padding-bottom: 40px;
-    margin-top: -20px;
+    margin-top: -40px;
     .list-head {
       height: 150px;
       background: #fff;
@@ -119,6 +104,8 @@ const playSong = (info) => {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: sticky;
+      top: 0;
       .count {
         color: #262338;
         font-size: 40px;

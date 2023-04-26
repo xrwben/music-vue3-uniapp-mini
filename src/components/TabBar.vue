@@ -6,9 +6,9 @@
     </div>
     <div class="icon-play">
       <div class="circle" @click="showPlayer">
-        <div class="default-pic" v-if="!imgSrc"></div>
-        <div class="play">
-          <img :src="imgSrc" alt="">
+        <div class="default-pic" v-if="!store.songImg"></div>
+        <div v-else class="play">
+          <img :src="store.songImg" alt="">
           <div class="btn-play"><i class="iconfont icon-play-simple"></i></div>
         </div>
       </div>
@@ -22,17 +22,21 @@
 
 <script setup>
 import { ref } from 'vue'
+import $mittBus from '@/utils/mittBus.js'
+import { playerStore } from '@/store/index.js'
 
+const store = playerStore()
 const currentTab = ref('music')
 
 const changeTab = (type) => {
   currentTab.value = type
 }
 const showPlayer = () => {
-
+  if (!store.songId) {
+    return
+  }
+  $mittBus.emit('controlPlayerMittBus', true)
 }
-
-const imgSrc = 'http://p1.music.126.net/WremGGGNBEfHb2HflFIgXg==/109951168313333599.jpg'
 </script>
 
 <style lang="less" scoped>
@@ -59,7 +63,7 @@ const imgSrc = 'http://p1.music.126.net/WremGGGNBEfHb2HflFIgXg==/109951168313333
         font-size: 48px;
       }
       & > p {
-        font-size: 20px;
+        font-size: 18px;
       }
     }
     .icon-play {
@@ -101,6 +105,7 @@ const imgSrc = 'http://p1.music.126.net/WremGGGNBEfHb2HflFIgXg==/109951168313333
           height: 100%;
           background: url("@/assets/img/icon-play-default.png") no-repeat center;
           background-size: cover;
+          border-radius: 50%;
         }
         .play {
           width: 100%;

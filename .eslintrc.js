@@ -36,7 +36,7 @@ module.exports = {
     // 'arrow-spacing': 'error',
     // 'space-before-blocks': 'warn',
     // 'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    // 'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     // eslint-pugin-vue规则
     'vue/multi-word-component-names': 'off',
     'vue/max-attributes-per-line': 'off',

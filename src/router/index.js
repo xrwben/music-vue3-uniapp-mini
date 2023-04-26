@@ -23,10 +23,25 @@ const router = createRouter({
       component: () => import('@/views/music/index.vue')
     },
     {
-      path: '/play',
-      name: 'play',
-      component: () => import('@/views/about.vue')
-    }
+      path: '/songlist',
+      name: 'songlist',
+      component: () => import('@/views/songlist/index.vue')
+    },
+    {
+      path: '/songlist-details',
+      name: 'songlist-details',
+      component: () => import('@/views/songlist/details.vue')
+    },
+    {
+      path: '/ranklist',
+      name: 'ranklist',
+      component: () => import('@/views/ranklist/index.vue')
+    },
+    {
+      path: '/ranklist-details',
+      name: 'ranklist-details',
+      component: () => import('@/views/ranklist/details.vue')
+    },
   ]
 })
 

@@ -1,5 +1,5 @@
 @import 'reset.less';
-@import '//at.alicdn.com/t/c/font_3891327_d2mbs69mkpn.css';
+@import '//at.alicdn.com/t/c/font_3891327_21hsda4dgp8.css';
 
 /** 清除浮动 **/
 .clearfix::after {
@@ -17,4 +17,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+/* 两行超出省略 */
+.txt-of-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }

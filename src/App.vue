@@ -5,14 +5,22 @@
   </div>
   <div class="footer">
     <tab-bar></tab-bar>
-    <player v-show="false"></player>
+    <player v-show="showPlayer"></player>
   </div>
 </template>
 
 <script setup>
 import TabBar from '@/components/TabBar.vue'
 import Player from '@/components/Player.vue'
+import { ref } from 'vue'
+import $mittBus from '@/utils/mittBus.js'
 // import { getPlayListAPI } from '@/api/index.js'
+
+const showPlayer = ref(false)
+
+$mittBus.on('controlPlayerMittBus', (data) => {
+  showPlayer.value = data
+})
 
 // getPlayListAPI({
 //   id: 3778678
@@ -42,7 +50,7 @@ import Player from '@/components/Player.vue'
   #app {
     width: 100%;
     height: 100vh;
-    background: #f9fafb;
+    background: #fff;
     overflow: hidden;
     .page-route {
       height: 100%;

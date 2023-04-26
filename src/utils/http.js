@@ -9,6 +9,7 @@ const axiosIns = axios.create({
 
 // 添加请求拦截器
 axiosIns.interceptors.request.use((config) => {
+  // console.log(config)
   return config
 }, (error) => {
   return Promise.reject(error);
